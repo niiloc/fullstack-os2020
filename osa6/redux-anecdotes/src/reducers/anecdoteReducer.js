@@ -1,3 +1,5 @@
+import anecdotes from "../services/anecdotes"
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -17,41 +19,55 @@ const asObject = (anecdote) => {
   }
 }
 
-export const addVote = (content) => {
-  return {
+export const addVote = content => {
+  return async dispatch => {
+    const votedAnec = await anecdotes.voteForAnec(content)
+    dispatch({
     type: 'ADD_VOTE',
-    data: { content }
+    data: { votedAnec }
+    })
   }
 }
 
-export const addBlog = (content) => {
-  return {
-    type: 'ADD_BLOG',
-    data: { 
-      content,
-      id: getId(),
-      votes: 0
-    }
+export const addAnec = content => {
+  return async dispatch => {
+    const newAnec = await anecdotes.createNew(content)
+    dispatch({
+    type: 'ADD_ANEC',
+    data: newAnec,
+    })
+  }
+}
+
+export const initializeAnecs = () => {
+  return async dispatch => {
+    const anecs = await anecdotes.getAll()
+    dispatch({
+      type: 'INIT_ANECS',
+      data: anecs,
+    })
   }
 }
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = [], action) => {
   switch (action.type) {
     case 'ADD_VOTE':
-      const id = action.data.content
+      const id = action.data.votedAnec.data.id
       const blogToChange = state.find(n => n.id === id)
       const changedBlog = {
         ...blogToChange,
         votes: blogToChange.votes+1
       }
-      console.log(blogToChange.votes, changedBlog.votes)
       return state.map(blog =>
         blog.id !== id ? blog : changedBlog
         )
-      case 'ADD_BLOG':
-        return [...state, action.data]
+    case 'ADD_ANEC':
+      return [...state, action.data]
+    case 'INIT_ANECS':
+      console.log("init anecs", action.data)
+      return action.data
     default:
       return state
   }

@@ -1,8 +1,10 @@
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import notificationReducer from './reducers/notificationReducer'
-import anecdoteReducer from './reducers/anecdoteReducer'
+import anecdoteReducer, { initializeAnecs } from './reducers/anecdoteReducer'
 import filterReducer from './reducers/filterReducer'
+import anecdotes from './services/anecdotes'
+import thunk from 'redux-thunk'
 
 const configureStore = () => {
     const reducer = combineReducers({
@@ -11,7 +13,9 @@ const configureStore = () => {
         filter: filterReducer
     })
 
-    const store = createStore(reducer, composeWithDevTools())
+    const store = createStore(reducer, composeWithDevTools(
+        applyMiddleware(thunk)
+    ))
     return store
 } 
 

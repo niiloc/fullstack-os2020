@@ -5,7 +5,6 @@ import filterReducer, { filterChange } from './reducers/filterReducer'
 const Filter = () => {
   const dispatch = useDispatch()
   const handleChange = (event) => {
-    // input-kentän arvo muuttujassa event.target.value
     event.preventDefault()
     const search = event.target.value
     console.log(search)

@@ -12,19 +12,17 @@ const AnecdoteList = () => {
         if (state.filter[0].content === null) {
             return state.anecdotes
         }
-
-        return state.anecdotes.filter(function (el) {
-            return el.content.toLowerCase().includes(state.filter[0].content.toLowerCase())
-        })
+        else {
+            return state.anecdotes.filter(function (el) {
+                return el.content.toLowerCase().includes(state.filter[0].content.toLowerCase())
+            })
+        }
     })
     const dispatch = useDispatch()
 
     const vote = (id) => {
     dispatch(addVote(id))
-    dispatch(notificationType('vote added'))
-    setTimeout(() => {
-        dispatch(notificationType(null))
-        }, 5000)
+    dispatch(notificationType(`new vote added`, 5)) 
     }
 
     return (

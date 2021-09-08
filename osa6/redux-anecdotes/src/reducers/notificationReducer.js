@@ -10,14 +10,21 @@ const asObject = (notification) => {
 
 const initialState = notificationsAtStart.map(asObject)
 
-export const notificationType = (message) => {
-    return {
-        type: 'OK',
-        message: message
+export const notificationType = (content, seconds) => {
+    return async dispatch => {
+      dispatch({
+      type: 'OK',
+      message: content,
+      })
+      setTimeout(() => {
+        dispatch({
+            type: 'CLEAR'
+        })
+      }, (seconds*1000))
     }
-}
+  }
+
 const notificationReducer = (notification = initialState, action) => {
-    console.log('vote not', notification, 'vote actioni', action)
     switch (action.type) {
         case 'OK':
             const msg = [
@@ -25,6 +32,11 @@ const notificationReducer = (notification = initialState, action) => {
             ]
             const msgState = msg.map(asObject)
             return msgState
+        case 'CLEAR':
+            const clearMsg = [
+                null
+            ]
+            return clearMsg.map(asObject)
         default:
             return notification
     }
