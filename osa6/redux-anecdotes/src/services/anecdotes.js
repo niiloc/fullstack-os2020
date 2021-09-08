@@ -22,11 +22,14 @@ export const createNew = async (content) => {
 
 export const voteForAnec = async (id, content) => {
   try {
-    let updatedVote = await axios.get(`${ baseUrl }/${id}`)
+    let firstResponse = await axios.get(`${ baseUrl }/${id}`)
+    let updatedVote = firstResponse.data
+    console.log(updatedVote, "update vote request")
     updatedVote = {
       ...updatedVote,
       votes: updatedVote.votes+1
     }
+    console.log(updatedVote, "update after adding")
     const response = await axios.put(`${ baseUrl }/${id}`, updatedVote)
     return response.data
   } catch(err) {

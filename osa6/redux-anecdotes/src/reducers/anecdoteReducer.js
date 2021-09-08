@@ -54,7 +54,8 @@ const initialState = anecdotesAtStart.map(asObject)
 const reducer = (state = [], action) => {
   switch (action.type) {
     case 'ADD_VOTE':
-      const id = action.data.votedAnec.data.id
+      console.log(action, "action in reducer")
+      const id = action.data.votedAnec.id
       const blogToChange = state.find(n => n.id === id)
       const changedBlog = {
         ...blogToChange,
@@ -66,7 +67,6 @@ const reducer = (state = [], action) => {
     case 'ADD_ANEC':
       return [...state, action.data]
     case 'INIT_ANECS':
-      console.log("init anecs", action.data)
       return action.data
     default:
       return state

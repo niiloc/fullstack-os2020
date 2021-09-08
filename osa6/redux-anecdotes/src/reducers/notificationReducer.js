@@ -10,16 +10,32 @@ const asObject = (notification) => {
 
 const initialState = notificationsAtStart.map(asObject)
 
+function showNotification(id, text) {
+    return { 
+        type: 'OK',
+        id: id,
+        message: text
+    }
+}
+
+function hideNotification(id) {
+    return {
+        type: 'CLEAR',
+        id
+    }
+}
+
+let notificationId = 0
+let varTimeout
+
 export const notificationType = (content, seconds) => {
     return async dispatch => {
-      dispatch({
-      type: 'OK',
-      message: content,
-      })
-      setTimeout(() => {
-        dispatch({
-            type: 'CLEAR'
-        })
+      const id = notificationId++
+      dispatch(showNotification(id, content))
+      
+        clearTimeout(varTimeout)
+        varTimeout = setTimeout(() => {
+        dispatch(hideNotification(id))
       }, (seconds*1000))
     }
   }
